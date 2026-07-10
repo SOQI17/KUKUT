@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, doc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../lib/firebase';
+import { doc, updateDoc, addDoc, collection } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { uploadToCloudinary } from '../lib/cloudinary';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Label } from './ui/Label';
@@ -75,13 +75,11 @@ export function AdminClassForm({ classToEdit, onSuccess, onCancel }: AdminClassF
     setUploading(true);
     setError('');
     try {
-      const fileRef = ref(storage, `classes/${Date.now()}_${file.name}`);
-      const snapshot = await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(snapshot.ref);
+      const url = await uploadToCloudinary(file);
       setImage(url);
     } catch (err: any) {
       console.error("Error uploading image:", err);
-      setError(err.message || 'Error al subir la imagen.');
+      setError(err.message || 'Error al subir la imagen a Cloudinary. Verifica las credenciales en tu archivo .env');
     } finally {
       setUploading(false);
     }

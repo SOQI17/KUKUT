@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, addDoc, doc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../lib/firebase';
+import { db } from '../lib/firebase';
+import { uploadToCloudinary } from '../lib/cloudinary';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Label } from './ui/Label';
@@ -58,13 +58,11 @@ export function AdminRetreatForm({ retreatToEdit, onSuccess, onCancel }: AdminRe
     setUploading(true);
     setError('');
     try {
-      const fileRef = ref(storage, `retreats/${Date.now()}_${file.name}`);
-      const snapshot = await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(snapshot.ref);
+      const url = await uploadToCloudinary(file);
       setImage(url);
     } catch (err: any) {
       console.error("Error uploading retreat image:", err);
-      setError(err.message || 'Error al subir la imagen del retiro.');
+      setError(err.message || 'Error al subir la imagen del retiro a Cloudinary. Verifica las credenciales en tu archivo .env');
     } finally {
       setUploading(false);
     }
@@ -184,7 +182,7 @@ export function AdminRetreatForm({ retreatToEdit, onSuccess, onCancel }: AdminRe
               />
               <label
                 htmlFor="retreat-image-upload"
-                className="flex items-center justify-center w-full rounded-full border border-salvia/30 text-salvia bg-transparent py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-salvia/10 select-none transition-colors text-center border-dashed border-2"
+                className="flex items-center justify-center w-full rounded-full border border-salvia/30 text-salvia bg-transparent py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-salvia/10 select-none transition-colors text-center border-dashed border-2 animate-none"
               >
                 {uploading ? 'Subiendo...' : image ? 'Cambiar Imagen' : 'Seleccionar Foto'}
               </label>

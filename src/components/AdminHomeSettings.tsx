@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../lib/firebase';
+import { db } from '../lib/firebase';
+import { uploadToCloudinary } from '../lib/cloudinary';
 import { Button } from './ui/Button';
 import { Label } from './ui/Label';
 import { motion } from 'framer-motion';
@@ -68,13 +68,11 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
     setHeroUploading(true);
     setError('');
     try {
-      const fileRef = ref(storage, `home/hero_${Date.now()}_${file.name}`);
-      const snapshot = await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(snapshot.ref);
+      const url = await uploadToCloudinary(file);
       setHeroImage(url);
     } catch (err: any) {
       console.error("Error uploading hero image:", err);
-      setError(err.message || 'Error al subir la imagen principal.');
+      setError(err.message || 'Error al subir la imagen principal a Cloudinary. Verifica las credenciales en tu archivo .env');
     } finally {
       setHeroUploading(false);
     }
@@ -86,13 +84,11 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
     setPhilosophyUploading(true);
     setError('');
     try {
-      const fileRef = ref(storage, `home/philosophy_${Date.now()}_${file.name}`);
-      const snapshot = await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(snapshot.ref);
+      const url = await uploadToCloudinary(file);
       setPhilosophyImage(url);
     } catch (err: any) {
       console.error("Error uploading philosophy image:", err);
-      setError(err.message || 'Error al subir la imagen de filosofía.');
+      setError(err.message || 'Error al subir la imagen de filosofía a Cloudinary. Verifica las credenciales en tu archivo .env');
     } finally {
       setPhilosophyUploading(false);
     }
