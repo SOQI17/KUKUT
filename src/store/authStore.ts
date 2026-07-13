@@ -41,12 +41,21 @@ export const useAuthStore = create<AuthState>((set) => ({
       if (user) {
         try {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
-          const isAdmin = user.email?.toLowerCase().includes('alexis') || 
-                          user.email?.toLowerCase() === 'suqisam@gmail.com' ||
-                          false;
+          const isAdmin = user.email?.toLowerCase() === 'suqisam@gmail.com';
           
           if (userDoc.exists()) {
             const data = userDoc.data() as UserData;
+            
+            // Auto-demote alexisguerra9577@gmail.com if they got admin role by mistake
+            if (data.email?.toLowerCase() === 'alexisguerra9577@gmail.com' && data.role === 'admin') {
+              data.role = 'student';
+              try {
+                await setDoc(doc(db, 'users', user.uid), { role: 'student' }, { merge: true });
+              } catch (writeErr) {
+                console.warn("Could not demote user role in Firestore:", writeErr);
+              }
+            }
+
             if (isAdmin && data.role !== 'admin') {
               data.role = 'admin';
               try {
