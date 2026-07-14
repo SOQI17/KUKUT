@@ -478,136 +478,143 @@ export function Schedule() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
+                  className="relative overflow-hidden rounded-[32px] border-[8px] border-white bg-arena shadow-xl transition-transform hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between min-h-[460px] p-6"
                 >
-                  <Card className="overflow-hidden rounded-[32px] border-[8px] border-white bg-arena shadow-xl transition-transform hover:-translate-y-1 hover:shadow-2xl">
-                    <div className="h-56 p-6 flex flex-col justify-end relative overflow-hidden rounded-t-[24px]">
-                       <div className="absolute inset-0">
-                           <img src={c.image || `https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=500&auto=format&fit=crop&sig=${c.id}`} alt="Yoga Class" className="w-full h-full object-cover mix-blend-overlay opacity-60" />
-                       </div>
-                       <div className="relative z-10 bg-white/90 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest text-terracota w-fit mb-2 shadow-sm">
-                          {c.level}
-                       </div>
-                    </div>
-                    <CardHeader className="pt-8 pb-2">
-                      <CardTitle className="font-serif text-2xl text-gris">{c.title}</CardTitle>
-                      <p className="text-sm text-gris/60 italic">Guiado por {c.instructor}</p>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="mb-8 space-y-3 text-sm text-gris/80 mt-4">
-                        <div className="flex justify-between items-center border-b border-white/50 pb-2">
+                  {/* Full Background Image & Dark Overlay */}
+                  <div className="absolute inset-0 z-0">
+                    <img 
+                      src={c.image || `https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=500&auto=format&fit=crop&sig=${c.id}`} 
+                      alt="Yoga Class" 
+                      className="w-full h-full object-cover" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/35"></div>
+                  </div>
+
+                  {/* Content Overlay */}
+                  <div className="relative z-10 flex-1 flex flex-col justify-between h-full w-full">
+                    <div>
+                      <span className="rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-terracota shadow-sm">
+                        {c.level}
+                      </span>
+                      
+                      <h3 className="font-serif text-2xl text-gris mt-6 mb-1 font-medium drop-shadow-md">{c.title}</h3>
+                      <p className="text-xs text-gris/70 italic mb-6 drop-shadow-sm">Guiado por {c.instructor}</p>
+                      
+                      <div className="space-y-3 text-sm text-gris/85 border-t border-white/30 pt-4 drop-shadow-sm">
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
                           <span className="text-xs uppercase tracking-widest opacity-60 font-medium">Fecha</span>
                           <span className="font-medium capitalize">{format(new Date(c.date || new Date()), "EEEE d MMM", { locale: es })}</span>
                         </div>
-                        <div className="flex justify-between items-center border-b border-white/50 pb-2">
+                        <div className="flex justify-between items-center border-b border-white/20 pb-2">
                           <span className="text-xs uppercase tracking-widest opacity-60 font-medium">Hora</span>
                           <span className="font-medium">{format(new Date(c.date || new Date()), "HH:mm")} ({c.duration} min)</span>
                         </div>
                         <div className="flex justify-between items-center pb-2">
                           <span className="text-xs uppercase tracking-widest opacity-60 font-medium">Cupos</span>
-                          <span className={`font-medium ${isFull ? 'text-red-500 font-bold' : 'text-salvia'}`}>
+                          <span className={`font-medium ${isFull ? 'text-red-400 font-bold' : 'text-salvia'}`}>
                             {isFull ? 'Agotado' : `${spotsAvailable} de ${c.capacity} disponibles`}
                           </span>
                         </div>
                       </div>
-                      
-                      <div className="flex flex-col gap-2 mt-4">
-                        {userData?.role === 'admin' ? (
-                          <>
-                            <div className="flex gap-2">
-                              <Button 
-                                onClick={() => {
-                                  setClassToEdit(c);
-                                  setIsFormOpen(true);
-                                }} 
-                                className="flex-1 rounded-full bg-salvia py-3 text-xs font-bold uppercase tracking-widest text-white hover:bg-salvia/90 transition-colors"
-                              >
-                                Editar
-                              </Button>
-                              <Button 
-                                onClick={() => {
-                                  const duplicate = { ...c, id: undefined } as any;
-                                  setClassToEdit(duplicate);
-                                  setIsFormOpen(true);
-                                }} 
-                                className="flex-1 rounded-full bg-arena py-3 text-xs font-bold uppercase tracking-widest text-gris hover:bg-arena transition-colors border border-arena"
-                              >
-                                Duplicar
-                              </Button>
-                            </div>
+                    </div>
+                    
+                    <div className="flex flex-col gap-2 mt-6">
+                      {userData?.role === 'admin' ? (
+                        <>
+                          <div className="flex gap-2">
                             <Button 
-                              onClick={() => handleDeleteClass(c.id)} 
-                              className="w-full rounded-full bg-red-50 border border-red-200 py-3 text-xs font-bold uppercase tracking-widest text-red-600 hover:bg-red-100 transition-colors"
+                              onClick={() => {
+                                setClassToEdit(c);
+                                setIsFormOpen(true);
+                              }} 
+                              className="flex-1 rounded-full bg-salvia py-3 text-xs font-bold uppercase tracking-widest text-white hover:bg-salvia/90 transition-colors shadow-md animate-none"
                             >
-                              Eliminar
+                              Editar
                             </Button>
-                          </>
-                        ) : (
-                          <div className="flex flex-col gap-2 w-full">
                             <Button 
-                              disabled={bookingLoading === c.id || (isFull && !isAlreadyBooked) || (isInactive && !isAlreadyBooked)}
-                              onClick={() => handleBook(c)} 
-                              className={`w-full rounded-full py-6 text-xs font-bold uppercase tracking-widest text-white transition-colors ${
-                                isAlreadyBooked 
-                                  ? 'bg-terracota hover:bg-red-600 shadow-md' 
-                                  : isInactive
-                                    ? 'bg-red-50 text-red-600 border border-red-200 cursor-not-allowed hover:bg-red-50'
-                                    : isFull 
-                                      ? 'bg-gris/40 cursor-not-allowed' 
-                                      : 'bg-gris hover:bg-salvia'
-                              }`}
+                              onClick={() => {
+                                const duplicate = { ...c, id: undefined } as any;
+                                setClassToEdit(duplicate);
+                                setIsFormOpen(true);
+                              }} 
+                              className="flex-1 rounded-full bg-arena py-3 text-xs font-bold uppercase tracking-widest text-gris hover:bg-arena transition-colors border border-arena shadow-md"
                             >
-                              {bookingLoading === c.id 
-                                ? 'Procesando...' 
-                                : isAlreadyBooked 
-                                  ? 'Cancelar Reserva' 
-                                  : isInactive
-                                    ? 'Suscripción Inactiva'
-                                    : isFull 
-                                      ? 'Sin Cupos' 
-                                      : 'Reservar Espacio'}
+                              Duplicar
                             </Button>
-
-                            {/* "Añadir al Calendario" Dropdown Button for Booked Classes */}
-                            {isAlreadyBooked && (
-                              <div className="relative w-full">
-                                <Button
-                                  type="button"
-                                  onClick={() => setActiveDropdownId(activeDropdownId === c.id ? null : c.id)}
-                                  className="w-full rounded-full bg-white/80 border border-arena py-3 text-xs font-bold uppercase tracking-widest text-gris hover:bg-white shadow-sm flex items-center justify-center gap-2 cursor-pointer transition-colors"
-                                >
-                                  📅 Añadir al Calendario
-                                </Button>
-
-                                {activeDropdownId === c.id && (
-                                  <div className="absolute right-0 left-0 bottom-full mb-2 z-20 rounded-2xl bg-white shadow-xl border border-arena/20 p-2 space-y-1">
-                                    <a
-                                      href={getGoogleCalendarUrl(c)}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      onClick={() => setActiveDropdownId(null)}
-                                      className="block w-full text-center px-4 py-2.5 text-xs font-semibold text-gris hover:bg-salvia/10 hover:text-salvia rounded-xl transition-colors cursor-pointer"
-                                    >
-                                      Google Calendar
-                                    </a>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        handleDownloadIcs(c);
-                                        setActiveDropdownId(null);
-                                      }}
-                                      className="block w-full text-center px-4 py-2.5 text-xs font-semibold text-gris hover:bg-salvia/10 hover:text-salvia rounded-xl transition-colors cursor-pointer"
-                                    >
-                                      Apple / Outlook / Android (.ics)
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            )}
                           </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
+                          <Button 
+                            onClick={() => handleDeleteClass(c.id)} 
+                            className="w-full rounded-full bg-red-50/10 border border-red-500/30 py-3 text-xs font-bold uppercase tracking-widest text-red-400 hover:bg-red-500/20 transition-colors shadow-md"
+                          >
+                            Eliminar
+                          </Button>
+                        </>
+                      ) : (
+                        <div className="flex flex-col gap-2 w-full">
+                          <Button 
+                            disabled={bookingLoading === c.id || (isFull && !isAlreadyBooked) || (isInactive && !isAlreadyBooked)}
+                            onClick={() => handleBook(c)} 
+                            className={`w-full rounded-full py-6 text-xs font-bold uppercase tracking-widest text-white transition-colors ${
+                              isAlreadyBooked 
+                                ? 'bg-terracota hover:bg-red-600 shadow-md' 
+                                : isInactive
+                                  ? 'bg-red-50 text-red-600 border border-red-200 cursor-not-allowed hover:bg-red-50'
+                                  : isFull 
+                                    ? 'bg-gris/40 cursor-not-allowed' 
+                                    : 'bg-gris hover:bg-salvia'
+                            }`}
+                          >
+                            {bookingLoading === c.id 
+                              ? 'Procesando...' 
+                              : isAlreadyBooked 
+                                ? 'Cancelar Reserva' 
+                                : isInactive
+                                  ? 'Suscripción Inactiva'
+                                  : isFull 
+                                    ? 'Sin Cupos' 
+                                    : 'Reservar Espacio'}
+                          </Button>
+
+                          {/* "Añadir al Calendario" Dropdown Button for Booked Classes */}
+                          {isAlreadyBooked && (
+                            <div className="relative w-full">
+                              <Button
+                                type="button"
+                                onClick={() => setActiveDropdownId(activeDropdownId === c.id ? null : c.id)}
+                                className="w-full rounded-full bg-white/80 border border-arena py-3 text-xs font-bold uppercase tracking-widest text-gris hover:bg-white shadow-sm flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                              >
+                                📅 Añadir al Calendario
+                              </Button>
+
+                              {activeDropdownId === c.id && (
+                                <div className="absolute right-0 left-0 bottom-full mb-2 z-20 rounded-2xl bg-white shadow-xl border border-arena/20 p-2 space-y-1">
+                                  <a
+                                    href={getGoogleCalendarUrl(c)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => setActiveDropdownId(null)}
+                                    className="block w-full text-center px-4 py-2.5 text-xs font-semibold text-gris hover:bg-salvia/10 hover:text-salvia rounded-xl transition-colors cursor-pointer"
+                                  >
+                                    Google Calendar
+                                  </a>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      handleDownloadIcs(c);
+                                      setActiveDropdownId(null);
+                                    }}
+                                    className="block w-full text-center px-4 py-2.5 text-xs font-semibold text-gris hover:bg-salvia/10 hover:text-salvia rounded-xl transition-colors cursor-pointer"
+                                  >
+                                    Apple / Outlook / Android (.ics)
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </motion.div>
               );
             }) : (
