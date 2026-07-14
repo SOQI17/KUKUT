@@ -15,6 +15,7 @@ interface YogaClass {
   capacity: number;
   date: string; // ISO string
   duration: number; // minutes
+  image?: string;
 }
 
 const DEFAULT_SETTINGS = {
@@ -282,26 +283,38 @@ export function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="rounded-[32px] border-[8px] border-white bg-arena shadow-md p-6 flex flex-col justify-between min-h-[320px]"
+                  className="overflow-hidden rounded-[32px] border-[8px] border-white bg-arena shadow-md flex flex-col justify-between min-h-[420px] transition-transform hover:-translate-y-1 hover:shadow-xl"
                 >
-                  <div>
-                    <span className="rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-terracota shadow-sm">
+                  <div className="h-56 p-6 flex flex-col justify-end relative overflow-hidden rounded-t-[24px]">
+                    <div className="absolute inset-0">
+                      <img 
+                        src={c.image || `https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=500&auto=format&fit=crop&sig=${c.id}`} 
+                        alt="Yoga Class" 
+                        className="w-full h-full object-cover" 
+                      />
+                    </div>
+                    <div className="relative z-10 bg-white/90 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest text-terracota w-fit shadow-sm">
                       {c.level}
-                    </span>
-                    <h3 className="font-serif text-2xl text-gris mt-6 mb-2 font-medium">{c.title}</h3>
-                    <p className="text-xs text-gris/60 italic mb-6">Con {c.instructor}</p>
-                    
-                    <div className="space-y-2 text-xs text-gris/70 border-t border-white/50 pt-4">
-                      <p className="capitalize">📅 {format(new Date(c.date), "EEEE d MMM, HH:mm 'hs'", { locale: es })}</p>
-                      <p>⏱ {c.duration} minutos de duración</p>
                     </div>
                   </div>
 
-                  <Link to="/schedule" className="mt-8">
-                    <Button className="w-full rounded-full bg-gris py-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-salvia transition-colors">
-                      Ver Detalles
-                    </Button>
-                  </Link>
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-serif text-2xl text-gris mb-2 font-medium">{c.title}</h3>
+                      <p className="text-xs text-gris/60 italic mb-6">Con {c.instructor}</p>
+                      
+                      <div className="space-y-2 text-xs text-gris/70 border-t border-white/50 pt-4">
+                        <p className="capitalize">📅 {format(new Date(c.date), "EEEE d MMM, HH:mm 'hs'", { locale: es })}</p>
+                        <p>⏱ {c.duration} minutos de duración</p>
+                      </div>
+                    </div>
+
+                    <Link to="/schedule" className="mt-8">
+                      <Button className="w-full rounded-full bg-gris py-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-salvia transition-colors">
+                        Ver Detalles
+                      </Button>
+                    </Link>
+                  </div>
                 </motion.div>
               ))}
             </div>
