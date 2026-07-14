@@ -826,13 +826,13 @@ export function Dashboard() {
           </motion.div>
         )}
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3 w-full max-w-full min-w-0 overflow-hidden md:overflow-visible">
           {/* COLUMNA PERFIL */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="md:col-span-1 space-y-8"
+            className="md:col-span-1 space-y-8 min-w-0 w-full"
           >
             <Card className="rounded-[32px] border-[8px] border-white bg-arena shadow-xl">
               <CardHeader className="px-8 pt-8 pb-4 border-b border-white/50">
@@ -937,7 +937,7 @@ export function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="md:col-span-2 space-y-8"
+            className="md:col-span-2 space-y-8 min-w-0 w-full"
           >
             {/* TABS DE ADMINISTACIÓN CONTENIDO CONTRASTADO */}
             {userData.role === 'admin' && (
