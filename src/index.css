@@ -172,6 +172,7 @@ img[alt="Yoga Background"],
 img[alt="Filosofía Kukut"],
 img[alt="Splash Welcome Background"],
 img[alt="Kukut Room Teaser"],
+img[alt="Logo"],
 section img {
   opacity: 0.85 !important; /* 85% para ver perfectamente el fondo subido por el usuario */
   mix-blend-mode: normal !important; /* Sin mezcla multiply para ver los colores reales de la foto */
@@ -190,6 +191,13 @@ img[alt="Splash Welcome Background"] {
   opacity: 0.35 !important; /* Opacidad adecuada para el fondo del splash */
   mix-blend-mode: normal !important;
   filter: brightness(70%) contrast(105%) !important;
+}
+
+/* El logo del navbar debe verse 100% normal y brillante */
+img[alt="Logo"] {
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
 }
 
 
