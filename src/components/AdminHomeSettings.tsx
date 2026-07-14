@@ -12,7 +12,11 @@ const DEFAULT_SETTINGS = {
   heroImage: 'https://images.unsplash.com/photo-1599901860904-17e08c3a4cb1?q=80&w=2070&auto=format&fit=crop',
   philosophyTitle: 'Nuestra Filosofía',
   philosophyText: 'En Kukut Yoga, creemos que el verdadero bienestar nace de la perfecta armonía entre el cuerpo, la mente y el entorno. Hemos creado un santuario digital y físico donde el diseño minimalista se encuentra con prácticas milenarias.\n\nNuestra misión es acompañarte en tu viaje hacia el equilibrio interior, ofreciéndote herramientas y espacios que inspiran calma y elegancia.',
-  philosophyImage: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1840&auto=format&fit=crop'
+  philosophyImage: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1840&auto=format&fit=crop',
+  teaserImage: '',
+  splashTitle: 'KUKUT YOGA',
+  splashSubtitle: 'Vive la experiencia',
+  splashImage: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1000&auto=format&fit=crop'
 };
 
 interface AdminHomeSettingsProps {
@@ -26,8 +30,16 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
   const [philosophyTitle, setPhilosophyTitle] = useState('');
   const [philosophyText, setPhilosophyText] = useState('');
   const [philosophyImage, setPhilosophyImage] = useState('');
+  const [teaserImage, setTeaserImage] = useState('');
+  const [splashTitle, setSplashTitle] = useState('');
+  const [splashSubtitle, setSplashSubtitle] = useState('');
+  const [splashImage, setSplashImage] = useState('');
+  
   const [heroUploading, setHeroUploading] = useState(false);
   const [philosophyUploading, setPhilosophyUploading] = useState(false);
+  const [teaserUploading, setTeaserUploading] = useState(false);
+  const [splashUploading, setSplashUploading] = useState(false);
+  
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState('');
@@ -45,6 +57,10 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
           setPhilosophyTitle(data.philosophyTitle || DEFAULT_SETTINGS.philosophyTitle);
           setPhilosophyText(data.philosophyText || DEFAULT_SETTINGS.philosophyText);
           setPhilosophyImage(data.philosophyImage || DEFAULT_SETTINGS.philosophyImage);
+          setTeaserImage(data.teaserImage || DEFAULT_SETTINGS.teaserImage);
+          setSplashTitle(data.splashTitle || DEFAULT_SETTINGS.splashTitle);
+          setSplashSubtitle(data.splashSubtitle || DEFAULT_SETTINGS.splashSubtitle);
+          setSplashImage(data.splashImage || DEFAULT_SETTINGS.splashImage);
         } else {
           setHeroTitle(DEFAULT_SETTINGS.heroTitle);
           setHeroSubtitle(DEFAULT_SETTINGS.heroSubtitle);
@@ -52,6 +68,10 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
           setPhilosophyTitle(DEFAULT_SETTINGS.philosophyTitle);
           setPhilosophyText(DEFAULT_SETTINGS.philosophyText);
           setPhilosophyImage(DEFAULT_SETTINGS.philosophyImage);
+          setTeaserImage(DEFAULT_SETTINGS.teaserImage);
+          setSplashTitle(DEFAULT_SETTINGS.splashTitle);
+          setSplashSubtitle(DEFAULT_SETTINGS.splashSubtitle);
+          setSplashImage(DEFAULT_SETTINGS.splashImage);
         }
       } catch (err) {
         console.error("Error loading home settings:", err);
@@ -94,6 +114,38 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
     }
   };
 
+  const handleTeaserImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setTeaserUploading(true);
+    setError('');
+    try {
+      const url = await uploadToCloudinary(file);
+      setTeaserImage(url);
+    } catch (err: any) {
+      console.error("Error uploading teaser image:", err);
+      setError(err.message || 'Error al subir la imagen del círculo central a Cloudinary.');
+    } finally {
+      setTeaserUploading(false);
+    }
+  };
+
+  const handleSplashImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSplashUploading(true);
+    setError('');
+    try {
+      const url = await uploadToCloudinary(file);
+      setSplashImage(url);
+    } catch (err: any) {
+      console.error("Error uploading splash image:", err);
+      setError(err.message || 'Error al subir la imagen de bienvenida a Cloudinary.');
+    } finally {
+      setSplashUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -106,6 +158,10 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
       philosophyTitle,
       philosophyText,
       philosophyImage,
+      teaserImage,
+      splashTitle,
+      splashSubtitle,
+      splashImage,
       updatedAt: new Date().toISOString()
     };
 
@@ -197,6 +253,32 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
               </div>
             </div>
           </div>
+
+          {/* TEASER IMAGE (CENTRAL ORB) Uploader */}
+          <div className="space-y-1">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-terracota opacity-80">Foto de Reemplazo para el Círculo Central ("Kukut Room")</Label>
+            <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/50 p-4 rounded-2xl border border-arena/30">
+              {teaserImage && (
+                <img src={teaserImage} alt="Teaser Preview" className="w-16 h-16 rounded-full object-cover shadow-sm border border-arena bg-arena" />
+              )}
+              <div className="flex-1 w-full">
+                <input
+                  id="teaser-image-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleTeaserImageUpload}
+                  disabled={teaserUploading}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="teaser-image-upload"
+                  className="flex items-center justify-center w-full rounded-full border border-salvia/30 text-salvia bg-transparent px-4 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-salvia/10 select-none transition-colors text-center border-dashed border-2"
+                >
+                  {teaserUploading ? 'Subiendo...' : teaserImage ? 'Cambiar Foto del Círculo' : 'Subir Foto para el Círculo'}
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* PHILOSOPHY SECTION */}
@@ -255,10 +337,65 @@ export function AdminHomeSettings({ onSuccess }: AdminHomeSettingsProps) {
           </div>
         </div>
 
+        {/* SPLASH SCREEN SECTION */}
+        <div className="bg-marfil/40 p-6 rounded-3xl border border-arena/30 space-y-4">
+          <h4 className="font-serif text-lg text-gris font-medium border-b border-arena pb-2">Pantalla de Bienvenida (Splash Screen)</h4>
+          
+          <div className="space-y-1">
+            <Label htmlFor="splashTitle" className="text-[10px] font-bold uppercase tracking-widest text-terracota opacity-80">Título de Bienvenida</Label>
+            <input
+              id="splashTitle"
+              required
+              value={splashTitle}
+              onChange={(e) => setSplashTitle(e.target.value)}
+              className="flex w-full rounded-2xl border-none bg-white px-4 py-3 text-sm shadow-inner focus-visible:ring-1 focus-visible:ring-salvia focus:outline-none"
+              placeholder="Ej. KUKUT YOGA"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="splashSubtitle" className="text-[10px] font-bold uppercase tracking-widest text-terracota opacity-80">Subtítulo o Eslogan</Label>
+            <input
+              id="splashSubtitle"
+              required
+              value={splashSubtitle}
+              onChange={(e) => setSplashSubtitle(e.target.value)}
+              className="flex w-full rounded-2xl border-none bg-white px-4 py-3 text-sm shadow-inner focus-visible:ring-1 focus-visible:ring-salvia focus:outline-none"
+              placeholder="Ej. Vive la experiencia"
+            />
+          </div>
+
+          {/* SPLASH IMAGE Uploader */}
+          <div className="space-y-1">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-terracota opacity-80">Imagen de Fondo de Bienvenida</Label>
+            <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/50 p-4 rounded-2xl border border-arena/30">
+              {splashImage && (
+                <img src={splashImage} alt="Splash Preview" className="w-24 h-16 rounded-xl object-cover shadow-sm border border-arena bg-arena" />
+              )}
+              <div className="flex-1 w-full">
+                <input
+                  id="splash-image-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleSplashImageUpload}
+                  disabled={splashUploading}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="splash-image-upload"
+                  className="flex items-center justify-center w-full rounded-full border border-salvia/30 text-salvia bg-transparent px-4 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-salvia/10 select-none transition-colors text-center border-dashed border-2"
+                >
+                  {splashUploading ? 'Subiendo...' : splashImage ? 'Cambiar Foto de Entrada' : 'Subir Foto de Entrada'}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="flex justify-end pt-2">
           <Button
             type="submit"
-            disabled={loading || heroUploading || philosophyUploading}
+            disabled={loading || heroUploading || philosophyUploading || teaserUploading || splashUploading}
             className="rounded-full bg-salvia px-8 py-3 text-xs font-bold uppercase tracking-widest text-white hover:bg-salvia/90 shadow-md"
           >
             {loading ? 'Guardando Ajustes...' : 'Guardar Todos los Ajustes'}

@@ -18,9 +18,9 @@ function MeditationOrb() {
     <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1.5}>
       <Sphere ref={meshRef} args={[1.5, 128, 128]} position={[0, 0, 0]}>
         <MeshDistortMaterial 
-          color="#EDE5D8" // Arena base color
-          emissive="#9CAF88" // Salvia glow
-          emissiveIntensity={0.2}
+          color="#c5a059" // Warm wood/bronze base color
+          emissive="#d4af37" // Elegant gold glow
+          emissiveIntensity={0.3}
           attach="material" 
           distort={0.4} 
           speed={1.5} 

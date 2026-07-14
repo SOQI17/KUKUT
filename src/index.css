@@ -5,11 +5,12 @@
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
 
-  --color-salvia: #9CAF88;
-  --color-arena: #EDE5D8;
-  --color-marfil: #FAF8F4;
-  --color-terracota: #C9856D;
-  --color-gris: #4A4A4A;
+  /* Nueva paleta: Negro y Madera */
+  --color-salvia: #9ca688; /* Verde salvia refinado que complementa la madera */
+  --color-arena: #2e1d15;  /* Base de madera de nogal oscuro */
+  --color-marfil: #09090a; /* Negro carbón profundo para el fondo general */
+  --color-terracota: #c9856d; /* Terracota cálido de acento */
+  --color-gris: #fafaf9; /* Texto claro (ivory/arena) para lectura en fondo negro */
   
   --color-background: var(--color-marfil);
   --color-foreground: var(--color-gris);
@@ -18,8 +19,179 @@
 @layer base {
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-salvia selection:text-white;
+    background-color: #09090a;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif;
   }
 }
+
+/* Overrides para la textura y estética de Madera y Negro */
+
+/* Efecto Madera Satinada Realista para Tarjetas y Contenedores */
+.bg-arena {
+  background-image: linear-gradient(135deg, rgba(50, 30, 20, 0.92) 0%, rgba(20, 10, 5, 0.96) 100%), 
+                    url('https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=1000&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  color: #f5f5f4 !important;
+}
+
+/* Aplicar estilo de madera selectivamente a tarjetas principales bg-white en Dashboard */
+.rounded-\[32px\].bg-white,
+.rounded-\[40px\].bg-white,
+.overflow-hidden.bg-white {
+  background-image: linear-gradient(135deg, rgba(50, 30, 20, 0.92) 0%, rgba(20, 10, 5, 0.96) 100%), 
+                    url('https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=1000&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  color: #fafaf9 !important;
+}
+
+/* Ajuste de Bordes Blancos de Tarjetas a Moldura de Madera */
+.border-white {
+  border-color: #4a2e1b !important; /* Tono de roble/nogal medio para el marco de madera */
+}
+.border-white\/50 {
+  border-color: rgba(74, 46, 27, 0.5) !important;
+}
+
+/* Inputs, Modales y Sub-Tarjetas que usaban fondo blanco (mantener limpio gris oscuro para contraste) */
+.bg-white {
+  background-color: #121214 !important; /* Fondo gris oscuro / carbón */
+  color: #fafaf9 !important;
+}
+.bg-white\/50 {
+  background-color: rgba(18, 18, 20, 0.5) !important;
+}
+.bg-white\/60 {
+  background-color: rgba(18, 18, 20, 0.6) !important;
+}
+.bg-white\/80 {
+  background-color: rgba(18, 18, 20, 0.8) !important;
+}
+.bg-white\/90 {
+  background-color: rgba(18, 18, 20, 0.9) !important;
+}
+
+/* Asegurar legibilidad del texto oscuro en inputs y tablas */
+.text-gris {
+  color: #e7e5e4 !important; /* Texto claro */
+}
+.text-gris\/80 {
+  color: rgba(231, 229, 228, 0.8) !important;
+}
+.text-gris\/70 {
+  color: rgba(231, 229, 228, 0.7) !important;
+}
+.text-gris\/60 {
+  color: rgba(231, 229, 228, 0.6) !important;
+}
+.text-gris\/50 {
+  color: rgba(231, 229, 228, 0.5) !important;
+}
+.text-gris\/40 {
+  color: rgba(231, 229, 228, 0.4) !important;
+}
+
+/* Estilos específicos para inputs oscuros en formularios */
+input, select, textarea {
+  background-color: #18181b !important;
+  color: #fafaf9 !important;
+  border: 1px solid #3f3f46 !important;
+}
+
+/* Asegurar que los placeholders tengan buena visibilidad pero sutil */
+input::placeholder, textarea::placeholder {
+  color: rgba(250, 250, 249, 0.4) !important;
+}
+
+/* MEJORAS DE BOTONES Y TRANSPARENCIA DE IMÁGENES (FEEDBACK DE USUARIO) */
+
+/* Botones principales claros (que usaban bg-gris) */
+.bg-gris {
+  background-color: #fafaf9 !important; /* Fondo marfil claro contrastante */
+  color: #09090a !important; /* Texto negro para legibilidad */
+}
+.bg-gris:hover {
+  background-color: #9ca688 !important; /* Salvia al pasar el cursor */
+  color: #fafaf9 !important;
+}
+
+/* Botones color Salvia (Verde) */
+.bg-salvia {
+  background-color: #9ca688 !important;
+  color: #09090a !important; /* Texto negro para excelente contraste */
+}
+.bg-salvia:hover {
+  background-color: #abb799 !important;
+  color: #09090a !important;
+}
+
+/* Botón Duplicar / Botones oscuros con border-arena o bg-arena */
+button.border-arena, 
+button.bg-arena,
+button.border-arena\/30 {
+  background-color: rgba(255, 255, 255, 0.05) !important; /* Fondo translúcido */
+  border-color: #4a2e1b !important; /* Borde de madera */
+  color: #e7e5e4 !important; /* Texto claro */
+}
+button.border-arena:hover, 
+button.bg-arena:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #fafaf9 !important;
+}
+
+/* Opacidad optimizada (75%) para que las fotos subidas se vean con total claridad, integradas a la madera */
+.bg-arena img, 
+.rounded-t-\[28px\] img, 
+.h-56 img,
+.h-64 img,
+.h-80 img,
+.relative img,
+img.object-cover {
+  opacity: 0.75 !important; /* 75% para que los uploads de clases/retiros se distingan perfectamente */
+  filter: sepia(20%) contrast(110%) brightness(85%) !important; /* Integración sepia muy suave */
+  mix-blend-mode: multiply !important; /* Mezcla de color madera */
+  transition: opacity 0.5s ease, filter 0.5s ease !important;
+}
+
+.bg-arena img:hover, 
+.rounded-t-\[28px\] img:hover, 
+.h-56 img:hover,
+.relative img:hover,
+img.object-cover:hover {
+  opacity: 0.9 !important; /* Mostrar casi por completo al hacer hover */
+  filter: none !important;
+}
+
+/* El banner de inicio (Hero Image), filosofía e imágenes de primer plano deben mostrarse con alta visibilidad de la imagen subida */
+img[alt="Yoga Background"],
+img[alt="Filosofía Kukut"],
+img[alt="Splash Welcome Background"],
+img[alt="Kukut Room Teaser"],
+section img {
+  opacity: 0.85 !important; /* 85% para ver perfectamente el fondo subido por el usuario */
+  mix-blend-mode: normal !important; /* Sin mezcla multiply para ver los colores reales de la foto */
+  filter: brightness(80%) contrast(105%) !important; /* Ligero oscurecimiento para mantener legibilidad del texto blanco */
+}
+
+/* El círculo central ("Kukut Room") debe verse normal, sin mezcla multiply */
+img[alt="Kukut Room Teaser"] {
+  opacity: 0.95 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+/* La pantalla de bienvenida (Splash Screen) debe mostrar la imagen subida con la opacidad correcta */
+img[alt="Splash Welcome Background"] {
+  opacity: 0.35 !important; /* Opacidad adecuada para el fondo del splash */
+  mix-blend-mode: normal !important;
+  filter: brightness(70%) contrast(105%) !important;
+}
+
+
+
+
